@@ -1,9 +1,6 @@
 
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Visualizations</title>
-</head>
 <body>
 	<ol>
 		<li>Once the csv files containing the node and links (or edges) data were loaded, the columns names were renamed to their respective lower cases.</li>
