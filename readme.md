@@ -2,13 +2,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Readme for the Visualizations</title>
+	<title>Visualizations</title>
 </head>
 <body>
-    <h3>Name: Mustapha Unubi Momoh</h3>
-    <h3>Student ID: 20986226</h3>
-    <h3>email: mmomoh@uwaterloo.ca</h3>
-	<h1>The following preprocessing were carried out on the data:</h1>
 	<ol>
 		<li>Once the csv files containing the node and links (or edges) data were loaded, the columns names were renamed to their respective lower cases.</li>
 		<li>The character “NA” representing Naveet was erroneously treated as a missing value by pandas, this was reversed by replacing it with “NA” both in the node and edges dataframes.</li>
