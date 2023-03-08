@@ -1,0 +1,22 @@
+{
+  "name": "force_directed_graphs",
+  "version": "1.0.0",
+  "description": "Force Directed Graphs and Adjacency Matrix",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "keywords": [
+    "force",
+    "directed",
+    "graphs",
+    "adjancency",
+    "matrix",
+    "etc"
+  ],
+  "author": "Mustapha Unubi Momoh",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
