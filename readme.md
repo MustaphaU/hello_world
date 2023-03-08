@@ -3,8 +3,9 @@
 <html>
 <body>
 	<h1> Animated Transition of Node link and Adjacency Matrix</h1>
+	<p><h2>Preprocessing steps:</h2></p>
 	<ol>
-		<h2>Preprocessing steps:</h2>
+		
 		
 		<h3>The following steps were taken to preprocess the csv files</h3>
 		<li>Once the csv files containing the node and links (or edges) data were loaded, the columns names were renamed to their respective lower cases.</li>
