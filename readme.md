@@ -5,7 +5,7 @@
 	<h1> Animated Transition of Node link and Adjacency Matrix</h1>
 	<h2>Preprocessing steps:</h2>
 	<ol>
-		<h3>The following steps were taken to preprocess the csv files</h3>
+		<h3>The following steps were taken to preprocess the csv files i.e. jean-complete-node.csv and jean-complete-edge.csv</h3>
 		<li>Once the csv files containing the node and links (or edges) data were loaded, the columns names were renamed to their respective lower cases.</li>
 		<li>The character “NA” representing Naveet was erroneously treated as a missing value by pandas, this was reversed by replacing it with “NA” both in the node and edges dataframes.</li>
 		<li>The source and target nodes were replaced with their indices.</li>
