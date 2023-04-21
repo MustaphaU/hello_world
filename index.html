@@ -377,7 +377,8 @@ function transitionToMatrix() {
     nodes[link.source].count += weight;  //increment the count of the number of times the character appears in the book
     nodes[link.target].count += weight;  //increment the count of the number of times the character appears in the book
   });
-   console.log(matrix);
+   //print the count of z
+
 //     console.log(nodes);
 
 
@@ -455,20 +456,26 @@ console.log(orders.label);
         .style("fill-opacity", function(d) { return z(d.z); })
         
 
-        .style("fill", function(d) { return nodes[d.x].group == nodes[d.y].group ? c(nodes[d.x].group) : null; })
+        .style("fill", function(d) { return nodes[d.x].group == nodes[d.y].group ? c(nodes[d.x].group) : null; }) 
         .on("mouseover", mouseover)
         .on("mouseout", mouseout);
   }
+
+  //print the third rectangle in the first row
+  console.log(d3.selectAll(".row").data()[0][8]); // the source character is 0, the target character is 8, the count is 1 
+  //print the position of the third rectangle in the first row
+  console.log(x(d3.selectAll(".row").data()[0][8].x)); // the source character is 0, the target character is 8, the count is 1
+
 
   function mouseover(p) {
     d3.selectAll(".row text").classed("active", function(d, i) { return i == p.y; }); //set the class of the text in the row to active
     d3.selectAll(".column text").classed("active", function(d, i) { return i == p.x; }); //set the class of the text in the column to active
     //increase the font size of the text in the particular row and column
-    d3.selectAll(".row text").style("font-size", function(d, i) { return i == p.y ? "10px" : "3.5px"; });
-    d3.selectAll(".column text").style("font-size", function(d, i) { return i == p.x ? "10px" : "3.5px"; });
+    d3.selectAll(".row text").style("font-size", function(d, i) { return i == p.y ? "10px" : "3.5px"; }); //if the text is in the row that is being hovered over, set the font size to 10px, otherwise set it to 3.5px
+    d3.selectAll(".column text").style("font-size", function(d, i) { return i == p.x ? "10px" : "3.5px"; }); //if the text is in the column that is being hovered over, set the font size to 10px, otherwise set it to 3.5px
     //increase the size of the cell
-    d3.selectAll(".cell").attr("width", function(d) { return d.x == p.x && d.y == p.y ? x.bandwidth() * 1.5 : x.bandwidth(); });
-    d3.selectAll(".cell").attr("height", function(d) { return d.x == p.x && d.y == p.y ? x.bandwidth() * 1.5 : x.bandwidth(); });
+    d3.selectAll(".cell").attr("width", function(d) { return d.x == p.x && d.y == p.y ? x.bandwidth() * 1.5 : x.bandwidth(); }); //if the cell is in the row and column that is being hovered over, set the width to 1.5 times the width of the cell, otherwise set it to the width of the cell
+    d3.selectAll(".cell").attr("height", function(d) { return d.x == p.x && d.y == p.y ? x.bandwidth() * 1.5 : x.bandwidth(); }); //if the cell is in the row and column that is being hovered over, set the height to 1.5 times the height of the cell, otherwise set it to the height of the cell
 
   }
 
@@ -494,7 +501,7 @@ console.log(orders.label);
 
     t.selectAll(".row")
         .delay(function(d, i) { return x(i) * 4; })
-        .attr("transform", function(d, i) { return "translate(0," + x(i) + ")"; })
+        .attr("transform", function(d, i) { return "translate(0," + x(i) + ")"; }) //
       .selectAll(".cell")
         .delay(function(d) { return x(d.x) * 4; })
         .attr("x", function(d) { return x(d.x); });
@@ -590,10 +597,15 @@ return {link: link, node: node};
 // //default view is the matrix view
 
 const {matrix, column, row, newsvg, reordering} = transitionToMatrix();
+console.log(matrix)
+
 const {link, node} = transitionToNode()
 toggleButton.text("Toggle to Matrix View");
 var newNode = node.clone(true);
 newNode.attr("opacity", 0)
+//clone the link
+var newLink = link.clone(true);
+newLink.attr("opacity", 0)
 //newNode.attr("opacity", 0)
 // node.attr("opacity", 0)
 // link.attr("opacity", 0)
@@ -622,6 +634,14 @@ newNode.transition().duration(4000)
 .attr("cy", function(d) { return d.y; }) //d.y = y coordinate of the node
 .attr("opacity", 1)
 
+newLink.transition().duration(4000)
+.attr("x1", function(d) { return d.source.x; }) //d.source.x = x coordinate of the source node
+.attr("y1", function(d) { return d.source.y; })  //d.source.y = y coordinate of the source node
+.attr("x2", function(d) { return d.target.x; }) //d.target.x = x coordinate of the target node
+.attr("y2", function(d) { return d.target.y; }) //d.target.y = y coordinate of the target
+.attr("opacity", 1)
+
+
 
 //add the node view
 node.transition().duration(4000)
@@ -646,63 +666,77 @@ console.log(node);
 } else if (currentState === "Toggle to Matrix View") { 
         //var newNode = node.clone(true);
         newNode.transition()
-        .duration(2000)
+        .duration(4000)
         .ease(d3.easeCubicOut)
-        .attr("cx", function(d, i) { return x(i); })
+        .attr("cx", function(d, i) { return x(i); }) //move the new nodes to the first column of the matrix
         .attr("cy", function(d) { return 0; })
         .on("end", function() {
             newNode.attr("opacity", 0);
         })
 
+        newLink.transition()
+        .duration(5000)
+        .ease(d3.easeCubicOut)
+        .attr("x1", function(d,p) {return x(d3.selectAll(".row").data()[d.target.index][d.source.index].x) }) //d.source.x = x coordinate of the source node
+        .attr("y1", function(d,p) {return x(d3.selectAll(".row").data()[d.target.index][d.source.index].y) })  //d.source.y = y coordinate of the source node
+        .attr("x2", function(d,p) {return x(d3.selectAll(".row").data()[d.target.index][d.source.index].x) }) //d.target.x = x coordinate of the target node
+        .attr("y2", function(d,p) {return x(d3.selectAll(".row").data()[d.target.index][d.source.index].y) }) //d.target.y = y coordinate of the target
+        .on("end", function() {
+            newLink.attr("opacity", 0);
+        })
+
+
         //move original nodes to the first column of the matrix
         node.transition()
-        .duration(2000)
+        .duration(4000)
         .ease(d3.easeCubicOut)
         .attr("cx", function(d) { return 0; })
-        .attr("cy", function(d, i) { return x(i); })
+        .attr("cy", function(d, i) { return x(i); }) //move the nodes to the first row of the matrix
         .on("end", function() {
             node.attr("opacity", 0);
         })
 
         //fade out the links
-        
-        // link.transition()
-        // .duration(2000)
-        // .ease(d3.easeLinear)
-        // .attr("x1", function(d,i) { return x(i); })
-        // .attr("y1", function(d,i) { return x(d.z); })
-        // .attr("x2", function(d,i) { return x(i); })
-        // .attr("y2", function(d,i) { return x(d.z); })
-        // .on("end", function() {
-        //     link.attr("opacity", 0);
-        // })
-
         link.transition()
-        .duration(2000)
-        .ease(d3.easeLinear)
-        .attr("x1", width / 2)
-        .attr("y1", height / 2)
-        .attr("x2", width / 2)
-        .attr("y2", height / 2)
-        .attr("opacity", 0)
+        .duration(5000)
+        .ease(d3.easeCubicOut)
+        .attr("x1", function(d,p) {return x(d3.selectAll(".row").data()[d.source.index][d.target.index].x) }) //d.source.x = x coordinate of the source node
+        .attr("y1", function(d,p) {return x(d3.selectAll(".row").data()[d.source.index][d.target.index].y) })
+        .attr("x2", function(d,p) {return x(d3.selectAll(".row").data()[d.source.index][d.target.index].x) })
+        .attr("y2", function(d,p) {return x(d3.selectAll(".row").data()[d.source.index][d.target.index].y) })
         .on("end", function() {
             link.attr("opacity", 0);
         })
 
+        // link.transition()
+        // .duration(2000)
+        // .ease(d3.easeLinear)
+        // .attr("x1", width / 2)
+        // .attr("y1", height / 2)
+        // .attr("x2", width / 2)
+        // .attr("y2", height / 2)
+        // .attr("opacity", 0)
+        // .on("end", function() {
+        //     link.attr("opacity", 0);
+        // })
+
         //add the matrix view
         row.transition()
-        .duration(2000)
+        .duration(4000)
         .ease(d3.easeCubicOut)
         .on("end", function() {
             row.attr("opacity", 1);
         });
 
     column.transition()
-        .duration(2000)
+        .duration(4000)
         .ease(d3.easeCubicOut)
         .on("end", function() {
             column.attr("opacity", 1);
         })
+
+    //print the cell corresponding to the link
+    
     
 
     newsvg.transition()
